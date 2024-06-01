@@ -1,0 +1,70 @@
+{
+  "name": "react-minimal-table",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "eslint --fix",
+    "publish:lib": "npm run build && npm publish",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "check:lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "main": "./index.js",
+  "module": "./index.mjs",
+  "exports": {
+    "./package.json": "./package.json",
+    "./components": {
+      "require": {
+        "default": "./dist/components.cjs"
+      },
+      "import": {
+        "default": "./dist/components.ts"
+      }
+    },
+    "./utility": {
+      "require": {
+        "default": "./dist/utility.cjs"
+      },
+      "import": {
+        "default": "./dist/utility.ts"
+      }
+    },
+    "./customstyles.css": "./dist/customstyles.css",
+    "./customstyles_using_scss.scss": "./dist/customstyles_using_scss.scss"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "styled-components": "^6.1.8"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^8.1.5",
+    "@storybook/addon-interactions": "^8.1.5",
+    "@storybook/addon-links": "^8.1.5",
+    "@storybook/blocks": "^8.1.5",
+    "@storybook/react": "^8.1.5",
+    "@storybook/react-vite": "^8.1.5",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "eslint": "^8.46.0",
+    "eslint-plugin-storybook": "^0.8.0",
+    "eslint-plugin-zonia": "^1.0.1",
+    "prettier": "^3.0.1",
+    "sass": "^1.77.4",
+    "storybook": "^8.1.5",
+    "storybook-dark-mode": "^4.0.1",
+    "typescript": "5.2.2",
+    "utility-types": "^3.11.0",
+    "vite": "^5.2.12"
+  },
+  "peerDependencies": {
+    "styled-components": "^6.1.8"
+  },
+  "files": [
+    "/dist"
+  ]
+}
