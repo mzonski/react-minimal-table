@@ -1,9 +1,15 @@
 import { PropsWithChildren } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './theme';
+import GlobalStyle from './GlobalStyle';
 
 function TableThemeProvider({ children }: Readonly<PropsWithChildren>) {
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+  return (
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      {children}
+    </ThemeProvider>
+  );
 }
 
 export default TableThemeProvider;

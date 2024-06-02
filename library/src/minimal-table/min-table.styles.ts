@@ -1,48 +1,40 @@
+import { Property } from 'csstype';
 import { CSSProperties } from 'react';
 import styled from 'styled-components';
 
-import { colorMixin, fontSizeMixin, spacingMixin } from '../theme/theme.mixins';
+import { borderMixin, colorMixin, spacingMixin } from '../theme/theme.mixins';
 
 import type { FixedLayoutTableProps, FluidLayoutTableProps } from './types';
 
-export const CommonLayoutContainer = styled.table`
-  box-sizing: border-box;
-  border-collapse: collapse;
-
-  ${colorMixin('bgColor', 'light')}
+export const CommonLayoutContainer = styled.div`
+  ${colorMixin('bgColor', 'white')}
+  ${borderMixin('small', 'all', true)}
 `;
 
-export const FixedLayoutContainer = styled.table<Pick<FixedLayoutTableProps, 'width'>>`
-  width: ${(props) => `${props.width}px`};
-  box-sizing: border-box;
-  border-collapse: collapse;
-
-  ${spacingMixin('padding', 'large', ['all'])}
+export const FixedLayoutContainer = styled(CommonLayoutContainer)<Pick<FixedLayoutTableProps, 'width'>>`
+  width: ${(props) => `${props.width}`};
 `;
 
-export const FluidLayoutContainer = styled.div<Pick<FluidLayoutTableProps, 'maxWidth' | 'minWidth'>>`
+export const FluidLayoutContainer = styled(CommonLayoutContainer)<Pick<FluidLayoutTableProps, 'maxWidth' | 'minWidth'>>`
   width: 100%;
   min-width: ${(props) => (props.minWidth ? `${props.minWidth}px` : 'auto')};
   max-width: ${(props) => (props.maxWidth ? `${props.maxWidth}px` : '100%')};
-
-  box-sizing: border-box;
-
-  ${spacingMixin('margin', 'small', ['all'])}
 `;
 
 export const StyledTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
+
+  tr:nth-child(odd) {
+    background-color: ${(props) => props.theme.colors.grey100};
+  }
 `;
 
-export const StyledCaption = styled.caption`
+export const StyledCaption = styled.caption<{ side: Property.CaptionSide }>`
   text-align: left;
-  caption-side: top;
   font-weight: bold;
-
-  ${spacingMixin('margin', 'large', ['bottom'])}
-  ${fontSizeMixin('large')}
+  caption-side: ${(props) => props.side};
 `;
 
 export const StyledColGroup = styled.colgroup``;
@@ -52,41 +44,35 @@ export const StyledCol = styled.col`
 `;
 
 export const StyledThead = styled.thead`
-  background-color: lightblue;
+  // background-color: lightblue;
 `;
 
 export const StyledTbody = styled.tbody`
-  background-color: lightsalmon;
+  // background-color: lightsalmon;
 `;
 
 export const StyledTfoot = styled.tfoot``;
 
 export const StyledTr = styled.tr`
-  &:nth-child(4) td {
-    border-bottom: 2px solid ${(props) => props.theme.colors.gray};
-  }
-
   &.selected {
-    ${colorMixin('bgColor', 'light')}
+    ${colorMixin('bgColor', 'grey200')}
   }
 `;
 
 export const StyledTh = styled.th<Pick<CSSProperties, 'textAlign'>>`
-  border-bottom: 2px solid ${(props) => props.theme.colors.gray};
+  border-bottom: 2px solid ${(props) => props.theme.colors.grey500};
   text-align: ${({ textAlign = 'right' }) => textAlign};
   font-weight: bold;
   cursor: pointer;
 
   ${spacingMixin('padding', 'medium', ['all'])}
-  ${colorMixin('color', 'text')}
 `;
 
 export const StyledTd = styled.td<Pick<CSSProperties, 'textAlign'>>`
   text-align: ${({ textAlign = 'right' }) => textAlign};
-  border-bottom: 1px solid ${(props) => props.theme.colors.gray};
+  border-bottom: 1px solid ${(props) => props.theme.colors.grey500};
 
   ${spacingMixin('padding', 'medium', ['all'])}
-  ${colorMixin('color', 'text')}
 `;
 
 export const ServiceLabel = styled.div`
@@ -95,38 +81,12 @@ export const ServiceLabel = styled.div`
   text-align: center;
 
   ${spacingMixin('padding', 'small', ['all'])}
-  ${colorMixin('color', 'neutral')}
-
-
-
-  &.mc {
-    ${colorMixin('bgColor', 'primary')}
-  }
-
-  &.rn {
-    ${colorMixin('bgColor', 'neutral')}
-    ${colorMixin('color', 'dark')}
-  }
-
-  &.rm {
-    ${colorMixin('bgColor', 'secondary')}
-  }
-
-  &.af {
-    ${colorMixin('bgColor', 'yellow')}
-    ${colorMixin('color', 'dark')}
-  }
 `;
 
 export const SectionHeader = styled.div`
   font-weight: bold;
-
-  ${spacingMixin('padding', 'medium', ['top', 'bottom'])}
-  ${colorMixin('color', 'text')}
 `;
 
 export const TotalRow = styled.tr`
   font-weight: bold;
-
-  ${colorMixin('color', 'text')}
 `;
