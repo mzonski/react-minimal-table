@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
-import type { ThemeFontWeights, ThemeTypographyHeads, ThemeTypographyTexts } from '../../typings';
+import type { ThemeFontWeights, ThemeTypographyHeads, ThemeTypographyTexts } from '#/typings';
 
 // TODO: Do I need to add React.HTMLAttributes<HTMLElement>?
 export type BaseTypographyProps = PropsWithChildren & {

@@ -37,7 +37,7 @@ export const getTableContainer = (
 // TODO: too generic, move it out
 export const getTypedKeys = Object.keys as <T extends object>(obj: T) => Array<keyof T>;
 export const getTypedEntries = Object.entries as <T extends object>(obj: T) => Array<[keyof T, T[keyof T]]>;
-// TOOD: END
+// TODO: END
 
 export const isHeaderContent = <TData extends RequiredDataProps>(
   options: HeaderOptions<TData>,

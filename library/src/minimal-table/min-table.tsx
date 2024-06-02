@@ -1,27 +1,8 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import React, { ForwardedRef, forwardRef, Fragment, ReactNode, useState } from 'react';
-import type { Property } from 'csstype';
+import React, { ForwardedRef, forwardRef } from 'react';
 import TableThemeProvider from '../theme/ThemeProvider';
-import {
-  FixedLayoutTableProps,
-  FluidLayoutTableProps,
-  HeaderOptions,
-  LayoutTableProps,
-  RequiredDataProps,
-} from './types';
+import { HeaderOptions, LayoutTableProps, RequiredDataProps } from './types';
 import { getTableContainer } from './min-table.utils';
-import {
-  ServiceLabel,
-  StyledCaption,
-  StyledTable,
-  StyledTbody,
-  StyledTd,
-  StyledTfoot,
-  StyledTh,
-  StyledThead,
-  StyledTr,
-  TotalRow,
-} from './min-table.styles';
+import { StyledTable } from './min-table.styles';
 import TableHeader from './table-header/table-header';
 import TableBody from './table-body/table-body';
 import TableFooter from './table-footer/table-footer';
@@ -43,7 +24,7 @@ export const fakeTableProps: TableProps<DummyDataProps> = {
       type: 'element',
       name: 'balance',
       dataProp: 'balance',
-      renderHeader: (headerIndex) => <div>Bylo ni ma: {headerIndex}</div>,
+      renderHeader: (headerIndex) => <div>Test: {headerIndex}</div>,
     },
   },
   data: [
@@ -72,12 +53,15 @@ export type TableProps<TData extends RequiredDataProps> = {
   };
 };
 
-export function MinTable<TData extends RequiredDataProps>(props: TableProps<TData>, ref: ForwardedRef<HTMLDivElement>) {
+export function MinTable<TData extends RequiredDataProps>(
+  props: TableProps<TData>,
+  _ref: ForwardedRef<HTMLDivElement>,
+) {
   const {
     data,
     summary,
     headers,
-    options: { tableContainerProps, ...filters },
+    options: { tableContainerProps },
   } = props;
 
   const [TableLayoutContainer, tableContainerElementProps] = getTableContainer(tableContainerProps);

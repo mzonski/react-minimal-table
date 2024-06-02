@@ -29,5 +29,10 @@ export default defineConfig(({ command, mode }) => {
       sourcemap: !isProduction,
       emptyOutDir: true,
     },
+    resolve: {
+      alias: {
+        "#": path.resolve(__dirname, "./src"),
+      },
+    },
   };
 });

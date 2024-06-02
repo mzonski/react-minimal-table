@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { textTypographyMixin } from '../../theme/theme.mixins';
 import { TextProps } from './Typography.types';
+import { textTypographyMixin } from '#/theme';
 
 const StyledText = styled.div<Pick<TextProps, 'variant' | 'weight'>>`
   ${(props) => textTypographyMixin(props.variant, props.weight)}

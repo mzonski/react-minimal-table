@@ -2,8 +2,6 @@ import type { Property } from 'csstype';
 import { CSSProperties, ReactNode } from 'react';
 import type { Required } from 'utility-types';
 
-export type TTableData<TData extends object = {}> = TData extends RequiredDataProps ? TData : never;
-
 type BaseLayoutTableProps = {
   // empty for now
 };

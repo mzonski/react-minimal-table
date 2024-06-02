@@ -1,5 +1,5 @@
-import component from '../../../components/containers/Box';
-import { DUMMY_MESSAGE } from '../../../utility/const';
+import component from '#/components/containers/Box';
+import { DUMMY_MESSAGE } from '#/utility/const';
 
 export default {
   title: 'Components/Containers',

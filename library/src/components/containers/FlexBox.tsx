@@ -1,4 +1,3 @@
-import { CSSProperties } from 'react';
 import styled from 'styled-components';
 import type { Property } from 'csstype';
 import Box from './Box';

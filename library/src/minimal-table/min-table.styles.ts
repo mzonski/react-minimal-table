@@ -1,8 +1,8 @@
-import { Property } from 'csstype';
+import type { Property } from 'csstype';
 import { CSSProperties } from 'react';
 import styled from 'styled-components';
 
-import { borderMixin, colorMixin, spacingMixin } from '../theme/theme.mixins';
+import { borderMixin, colorMixin, spacingMixin } from '#/theme';
 
 import type { FixedLayoutTableProps, FluidLayoutTableProps } from './types';
 

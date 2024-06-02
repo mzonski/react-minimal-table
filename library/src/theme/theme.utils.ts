@@ -1,10 +1,10 @@
 import { isNumber, isString } from 'lodash';
 
-import type { ValidSizeFormat } from '../typings';
+import type { ValidSizeFormat } from '#/typings';
 
 import { DEFAULT_FONT_SIZE } from './theme.const';
 
-// TODO: check also if previx is number
+// TODO: check also if prefix is number
 const isValueSizePx = (str: string): str is ValidSizeFormat => str.endsWith('px');
 const isValueSizeRem = (str: string): str is ValidSizeFormat => str.endsWith('rem');
 

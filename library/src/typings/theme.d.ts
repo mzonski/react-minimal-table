@@ -1,7 +1,7 @@
 import 'styled-components';
 import type { Property } from 'csstype';
 
-import { theme } from '../theme/theme';
+import { theme } from '#/theme';
 
 type ValidFontSizeUnits = 'px' | 'rem';
 export type ValidSizeFormat = `${number}${ValidFontSizeUnits}` | '0';
@@ -21,7 +21,7 @@ export type ThemeFontWeights = keyof typeof theme.fonts.weights;
 export type ThemeBorderSizes = keyof typeof theme.borders.size;
 
 declare module 'styled-components' {
-  export interface DefaultTheme {
+  export interface TableTheme {
     colors: Record<ThemeColors, ValidColorFormat>;
     spacing: Record<ThemeSpacings, ValidSizeFormat>;
     components: {

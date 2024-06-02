@@ -1,6 +1,5 @@
-import component from '../../../components/containers/FlexBox';
-import { DUMMY_MESSAGE } from '../../../utility/const';
-import { theme } from '../../../theme/theme';
+import component from '#/components/containers/FlexBox';
+import { theme } from '#/theme';
 
 function StorybookFlexChildren() {
   return (

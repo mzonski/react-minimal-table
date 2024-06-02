@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { headingTypographyMixin } from '../../theme/theme.mixins';
 import { HeadingProps } from './Typography.types';
+import { headingTypographyMixin } from '#/theme/theme.mixins';
 
 const StyledHeading = styled.div<Pick<HeadingProps, 'variant' | 'weight'>>`
   ${(props) => headingTypographyMixin(props.variant, props.weight)}

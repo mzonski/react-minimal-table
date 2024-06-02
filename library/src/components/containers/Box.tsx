@@ -1,7 +1,7 @@
 import React, { ElementType } from 'react';
 import styled from 'styled-components';
-import { spacingMixin } from '../../theme/theme.mixins';
-import { PolymorphicComponentProp, ThemeSpacings } from '../../typings';
+import { spacingMixin } from '#/theme/theme.mixins';
+import type { PolymorphicComponentProp, ThemeSpacings } from '#/typings';
 
 type DefaultBoxProps = { $padding?: ThemeSpacings; $margin?: ThemeSpacings };
 export type BoxProps<C extends ElementType> = PolymorphicComponentProp<C, DefaultBoxProps>;

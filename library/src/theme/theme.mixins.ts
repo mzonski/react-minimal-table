@@ -1,6 +1,6 @@
 import { css, ExecutionContext } from 'styled-components';
 
-import {
+import type {
   Autocomplete,
   ThemeBorderSizes,
   ThemeColors,
@@ -8,7 +8,7 @@ import {
   ThemeSpacings,
   ThemeTypographyHeads,
   ThemeTypographyTexts,
-} from '../typings';
+} from '#/typings';
 
 type MoveType = 'margin' | 'padding';
 type Corners = 'top' | 'left' | 'right' | 'bottom' | 'vertical' | 'horizontal' | 'all';
@@ -86,7 +86,7 @@ export const borderMixin = (
     const { selectedSize, selectedColor, selectedType, selectedRadius } = getValues(props);
     const borderStyle = `${selectedSize} ${selectedType} ${selectedColor}`;
 
-    let returnCss: string = '';
+    let returnCss: string;
 
     switch (corners) {
       case 'top':

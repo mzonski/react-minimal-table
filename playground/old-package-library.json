@@ -3,16 +3,39 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
+    "dev": "vite",
     "build": "vite build",
+    "preview": "vite preview",
+    "format": "eslint --fix",
+    "prettify": "prettier './**/*.{mjs,cjs,json,md}' --write",
     "publish:lib": "npm run build && npm publish",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "lint:check": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "prettify": "prettier './**/*.{mjs,cjs,json,md}' --write",
-    "format": "eslint --fix"
+    "check:lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "main": "./index.js",
   "module": "./index.mjs",
+  "exports": {
+    "./package.json": "./package.json",
+    "./components": {
+      "require": {
+        "default": "./dist/components.cjs"
+      },
+      "import": {
+        "default": "./dist/components.ts"
+      }
+    },
+    "./utility": {
+      "require": {
+        "default": "./dist/utility.cjs"
+      },
+      "import": {
+        "default": "./dist/utility.ts"
+      }
+    },
+    "./customstyles.css": "./dist/customstyles.css",
+    "./customstyles_using_scss.scss": "./dist/customstyles_using_scss.scss"
+  },
   "dependencies": {
     "@fontsource-variable/plus-jakarta-sans": "^5.0.21",
     "lodash": "^4.17.21",

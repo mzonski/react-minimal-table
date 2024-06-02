@@ -1,4 +1,4 @@
-import { fakeTableProps, MinTable } from '../minimal-table/min-table';
+import { fakeTableProps, MinTable } from '#/minimal-table/min-table';
 
 export default {
   title: 'Table',
