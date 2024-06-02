@@ -1,1 +1,1 @@
-export const DUMMY_MESSAGE = 'Zażółć gęślą jaźń. Lorem ipsum dolor sit amet.';
+export const DUMMY_MESSAGE = 'Zażółć gęślą jaźń. The quick brown fox jumps over the lazy dog.';

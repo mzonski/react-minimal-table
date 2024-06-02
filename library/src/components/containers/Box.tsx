@@ -4,7 +4,7 @@ import { spacingMixin } from '#/theme/theme.mixins';
 import type { PolymorphicComponentProp, ThemeSpacings } from '#/typings';
 
 type DefaultBoxProps = { $padding?: ThemeSpacings; $margin?: ThemeSpacings };
-export type BoxProps<C extends ElementType> = PolymorphicComponentProp<C, DefaultBoxProps>;
+export type BoxProps<C extends ElementType = 'div'> = PolymorphicComponentProp<C, DefaultBoxProps>;
 
 const StyledBox = styled.div<DefaultBoxProps>`
   ${(props) => props.$padding && spacingMixin('padding', props.$padding)}

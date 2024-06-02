@@ -83,6 +83,6 @@ export const theme = {
     },
     color: themeColors.black,
     type: 'solid',
-    radius: valueToRem(2),
+    radius: valueToRem(4),
   },
 } as const;

@@ -1,8 +1,9 @@
+import { ElementType } from 'react';
 import styled from 'styled-components';
 import type { Property } from 'csstype';
-import Box from './Box';
+import Box, { BoxProps } from './Box';
 
-type FlexProps = {
+export type FlexProps<C extends ElementType = 'div'> = BoxProps<C> & {
   $inline?: boolean;
   $direction?: Property.FlexDirection;
   $justify?: Property.JustifyContent;

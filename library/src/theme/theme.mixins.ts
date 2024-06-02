@@ -38,7 +38,7 @@ export const spacingMixin = (
           case 'horizontal':
             return `${type}-left: ${selectedSpacing}; ${type}-right: ${selectedSpacing};`;
           case 'all':
-            return `${type}: ${selectedSpacing}; ${type}-right: ${selectedSpacing};`;
+            return `${type}: ${selectedSpacing};`;
           default:
             throw new Error(`Selected corner not supported: ${corner}`);
         }
