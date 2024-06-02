@@ -54,3 +54,13 @@ export const convertArrayToMap = <T, K>(keySelector: (item: T) => K, list: T[]):
 export const convertMapToArray = <K, V>(map: Map<K, V>): V[] => {
   return Array.from(map.values());
 };
+
+export function convertMapToRecord<TKey extends string | number | symbol, TValue>(
+  map: Map<TKey, TValue>,
+): Record<TKey, TValue> {
+  const record: Record<TKey, TValue> = {} as Record<TKey, TValue>;
+  map.forEach((value, key) => {
+    record[key] = value;
+  });
+  return record;
+}

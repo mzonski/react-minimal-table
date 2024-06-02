@@ -1,4 +1,4 @@
-import { MinTable, TableProps } from '#/minimal-table/min-table';
+import MinTable, { TableProps } from '#/minimal-table/min-table';
 
 import { DummyDataProps, fakeOrdersTableProps, fakeTableProps } from './min-table.storydata';
 
