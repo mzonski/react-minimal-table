@@ -1,5 +1,6 @@
-import { MinTable } from '#/minimal-table/min-table';
-import { fakeTableProps } from '#/minimal-table/min-table.fakedata';
+import { MinTable, TableProps } from '#/minimal-table/min-table';
+
+import { DummyDataProps, fakeOrdersTableProps, fakeTableProps } from './min-table.storydata';
 
 export default {
   title: 'Table',
@@ -21,9 +22,13 @@ export const Fluid = {
     options: {
       ...fakeTableProps.options,
       tableContainerProps: {
-        layoutType: 'fluid',
-        minWidth: 400,
+        $layoutType: 'fluid',
+        $minWidth: 400,
       },
     },
-  },
+  } as TableProps<DummyDataProps>,
+};
+
+export const Renderers = {
+  args: fakeOrdersTableProps,
 };

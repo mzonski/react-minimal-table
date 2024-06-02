@@ -10,3 +10,7 @@ export type PolymorphicComponentProp<C extends React.ElementType, Props = object
   Props & AsProp<C>
 > &
   Omit<React.ComponentPropsWithoutRef<C>, PropsToOmit<C, Props>>;
+
+export type PrefixPropsWithDolar<T> = {
+  [K in keyof T as `$${string & K}`]: T[K];
+};

@@ -1,21 +1,25 @@
 import React from 'react';
-import { StyledTd, StyledTfoot, TotalRow } from '../min-table.styles';
+import { TotalRow } from '../min-table.styles';
 import { TableProps } from '../min-table';
 import { RequiredDataProps } from '../types';
+import { StyledTd } from '../table-body/table-body.styles';
+import { StyledTfoot } from './table-footer.styles';
+import { PickNonNullable } from '#/typings';
 
-type Props<TData extends RequiredDataProps> = Pick<TableProps<TData>, 'headers' | 'summary'>;
+type Props<TData extends RequiredDataProps> = Pick<TableProps<TData>, 'headers'> &
+  PickNonNullable<TableProps<TData>, 'summary'>;
 
 function TableFooter<TData extends RequiredDataProps>({ headers, summary }: Readonly<Props<TData>>) {
-  // xd
+  if (!summary) throw new Error('Missing summary');
   return (
     <StyledTfoot>
       <TotalRow>
         {Object.values(headers).map((header) => {
           return (
             <StyledTd
-              key={`footer-${String(header.dataProp)}`}
+              key={`total-${String(header.dataProp)}`}
               colSpan={header.colSpan}
-              textAlign={header.colTextAlign}
+              $textAlign={header.colTextAlign}
             >
               {summary[String(header.dataProp)]}
             </StyledTd>

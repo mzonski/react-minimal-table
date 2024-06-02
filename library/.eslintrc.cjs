@@ -28,10 +28,12 @@ const config = {
   },
   overrides: [
     {
-      files: ["*.stories.@(ts|tsx|js|jsx|mjs|cjs)"],
+      files: ["*.stories.@(ts|tsx|js|jsx|mjs|cjs)", "*.storyutil.@(ts|tsx|js|jsx|mjs|cjs)", "*.storydata.@(ts|tsx|js|jsx|mjs|cjs)"],
       extends: ["plugin:storybook/recommended"],
       rules: {
         "import/no-extraneous-dependencies": "off",
+        "no-plusplus": "off",
+        "react-refresh/only-export-components": "off",
         // 'storybook/hierarchy-separator': 'error',
         // 'storybook/default-exports': 'off',
       },

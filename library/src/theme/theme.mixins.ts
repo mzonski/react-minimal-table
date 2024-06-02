@@ -136,10 +136,7 @@ const getTypographyValues = (props: ExecutionContext, type: 'head' | 'text', var
   };
 };
 
-export const headingTypographyMixin = (
-  variant: Autocomplete<ThemeTypographyHeads>,
-  weight: Autocomplete<ThemeFontWeights>,
-) => {
+export const headingTypographyMixin = (variant: ThemeTypographyHeads, weight: ThemeFontWeights) => {
   const applyTypography = (props: ExecutionContext) => {
     const { fontSize, lineHeight, fontWeight } = getTypographyValues(props, 'head', variant, weight);
 

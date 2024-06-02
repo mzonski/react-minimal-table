@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyledTh, StyledThead, StyledTr } from '../min-table.styles';
+import { StyledTr } from '../min-table.styles';
 import { TableProps } from '../min-table';
 import { RequiredDataProps } from '../types';
 import { getTypedEntries, isHeaderContent, isHeaderElement } from '../min-table.utils';
+import { StyledTh, StyledThead } from './table-header.styles';
 
 type Props<TData extends RequiredDataProps> = Pick<TableProps<TData>, 'headers'>;
 
@@ -12,11 +13,11 @@ function TableHeader<TData extends RequiredDataProps>({ headers }: Readonly<Prop
     <StyledThead>
       <StyledTr>
         {getTypedEntries(headers).map(([id, headerEntry]) => {
-          const { colTextAlign, colSpan } = headerEntry;
+          const { colTextAlign, colSpan, width } = headerEntry;
           return (
-            <StyledTh key={id} textAlign={colTextAlign} colSpan={colSpan}>
+            <StyledTh key={id} $textAlign={colTextAlign} colSpan={colSpan} $width={width}>
               {isHeaderContent(headerEntry) && headerEntry.content}
-              {isHeaderElement(headerEntry) && headerEntry.renderHeader(id)}
+              {isHeaderElement(headerEntry) && headerEntry.renderHeaderContent(id)}
             </StyledTh>
           );
         })}

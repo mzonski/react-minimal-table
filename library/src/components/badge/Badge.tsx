@@ -10,7 +10,8 @@ export type BadgeProps = PropsWithChildren & {
   $dense?: boolean;
 };
 
-const StyledBadge = styled.div<BadgeProps>`
+const StyledBadge = styled.span<BadgeProps>`
+  overflow: hidden;
   ${(props) => {
     return css`
       ${colorMixin('bgColor', props.$bgColor)}

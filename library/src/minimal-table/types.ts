@@ -2,32 +2,39 @@ import type { Property } from 'csstype';
 import { CSSProperties, ReactNode } from 'react';
 import type { Required } from 'utility-types';
 
+import type { PrefixPropsWithDolar } from '#/typings';
+
 type BaseLayoutTableProps = {
   // empty for now
 };
 
-export type FixedLayoutTableProps = BaseLayoutTableProps & {
-  layoutType: 'fixed';
-} & Required<Pick<CSSProperties, 'width'>>;
+export type FixedLayoutTableProps = BaseLayoutTableProps &
+  PrefixPropsWithDolar<
+    {
+      layoutType: 'fixed';
+    } & Required<Pick<CSSProperties, 'width'>>
+  >;
 
-export type FluidLayoutTableProps = BaseLayoutTableProps & {
-  layoutType: 'fluid';
-  minWidth?: number;
-  maxWidth?: number;
-};
+export type FluidLayoutTableProps = BaseLayoutTableProps &
+  PrefixPropsWithDolar<
+    {
+      layoutType: 'fluid';
+    } & Required<Pick<CSSProperties, 'minWidth' | 'maxWidth'>>
+  >;
 
 export type LayoutTableProps = FixedLayoutTableProps | FluidLayoutTableProps;
 
 export type RequiredDataProps = {
   id: number;
-  renderCell?: (headerIndex: number, rowIndex: number) => ReactNode;
 };
 
 type BaseHeaderOptions<TData extends RequiredDataProps> = {
   name: string;
+  width?: Property.Width;
   colSpan?: number;
   dataProp: keyof TData;
   colTextAlign?: Property.TextAlign;
+  renderCellContent?: (rowIndex: number, value: TData[keyof TData]) => ReactNode;
 };
 
 export type HeaderContentOptions<TData extends RequiredDataProps> = BaseHeaderOptions<TData> & {
@@ -37,7 +44,7 @@ export type HeaderContentOptions<TData extends RequiredDataProps> = BaseHeaderOp
 
 export type HeaderRendererOptions<TData extends RequiredDataProps> = BaseHeaderOptions<TData> & {
   type: 'element';
-  renderHeader: (headerIndex: number) => ReactNode;
+  renderHeaderContent: (headerIndex: number) => ReactNode;
 };
 
 export type HeaderOptions<TData extends RequiredDataProps> = HeaderContentOptions<TData> | HeaderRendererOptions<TData>;
