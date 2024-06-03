@@ -8,6 +8,7 @@ const config = {
     project: "tsconfig.json",
   },
   rules: {
+    "react/prop-types": "off",
     "react/require-default-props": "off",
     "react/jsx-props-no-spreading": "off",
     "react/destructuring-assignment": "off",

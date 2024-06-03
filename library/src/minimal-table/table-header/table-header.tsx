@@ -2,8 +2,9 @@ import React from 'react';
 import { StyledTr } from '../min-table.styles';
 import { TableProps } from '../min-table';
 import { RequiredDataProps } from '../types';
-import { getTypedEntries, isHeaderContent, isHeaderElement } from '../min-table.utils';
+import { isHeaderContent, isHeaderElement } from '../min-table.utils';
 import { StyledTh, StyledThead } from './table-header.styles';
+import { getTypedEntries } from '#/utility/converters';
 
 type Props<TData extends RequiredDataProps> = Pick<TableProps<TData>, 'headers'>;
 

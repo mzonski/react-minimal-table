@@ -30,19 +30,19 @@ export type TableProps<TData extends RequiredDataProps> = {
 // type SelectedIdentityKey = ReturnType<StripUndefined<typeof props.options.selectable>['keySelector']>;
 
 type TableRefObj = SelectedKeysContextType<RequiredDataProps['id']> & {
-  selectedIds: Record<RequiredDataProps['id'], boolean>;
+  selectedIds: RequiredDataProps['id'][];
   selectedKeysControl: React.RefObject<SelectedKeysContextType<RequiredDataProps['id']>> | null;
 };
 
 function DummyCheckUncheckAll<TData extends RequiredDataProps>(props: Pick<TableProps<TData>, 'data'>) {
-  const { removeKey, addKey } = useSelectedKeysContext();
+  const { clear, add } = useSelectedKeysContext();
 
   const handleCheckAll = () => {
-    props.data.forEach((entry) => addKey(entry.id));
+    add(props.data.map((entry) => entry.id));
   };
 
   const handleDeselectAll = () => {
-    props.data.forEach((entry) => removeKey(entry.id));
+    clear();
   };
 
   return (
@@ -61,30 +61,23 @@ function DummyCheckUncheckAll<TData extends RequiredDataProps>(props: Pick<Table
 function TableComponent<TData extends RequiredDataProps>(props: TableProps<TData>, ref: ForwardedRef<TableRefObj>) {
   const selectedKeysRef = useRef<SelectedKeysContextType<RequiredDataProps['id']>>(null);
   const [TableLayoutContainer, tableContainerElementProps] = getTableContainer(props.options.tableContainerProps);
-  const [selectedIds, setSelectedIds] = useState<Record<RequiredDataProps['id'], boolean>>();
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        selectedIds,
-        selectedKeysControl: selectedKeysRef,
-      } as TableRefObj;
-    },
-    [selectedIds],
-  );
+  // useImperativeHandle(
+  //   ref,
+  //   () => {
+  //     return {
+  //       selectedIds,
+  //       selectedKeysControl: selectedKeysRef,
+  //     } as TableRefObj;
+  //   },
+  //   [selectedIds],
+  // );
 
   const { data, summary, headers } = props;
 
-  const handleUpdateSelectedKey = useCallback(
-    (keys: RequiredDataProps['id'][]) => {
-      console.log('New keys selected', keys);
-      const map = new Map<RequiredDataProps['id'], boolean>();
-      data.forEach((en) => map.set(en.id, keys.includes(en.id)));
-      setSelectedIds(convertMapToRecord(map));
-    },
-    [data],
-  );
+  const handleUpdateSelectedKey = useCallback((keys: RequiredDataProps['id'][]) => {
+    console.log('Selected keys length', keys.length);
+  }, []);
 
   return (
     <TableThemeProvider>

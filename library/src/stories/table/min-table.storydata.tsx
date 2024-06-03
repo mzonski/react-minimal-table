@@ -66,7 +66,7 @@ const generateFakeOrders = (length: number) => {
   return Array.from({ length }, generateFakeOrder);
 };
 
-const fakeOrdersList = generateFakeOrders(50);
+const fakeOrdersList = generateFakeOrders(2000);
 const fakeOrdersRecord = convertListToRecord((en) => en.id, fakeOrdersList);
 
 function PaymentStatusBadge({ status }: { status: PaymentStatus }) {

@@ -5,32 +5,31 @@ import React, {
   PropsWithChildren,
   useCallback,
   useContext,
-  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
-  useState,
 } from 'react';
-import { remove } from 'lodash';
+import { isArray } from 'lodash';
 import type { RequiredDataProps } from '../types';
-import { getTypedKeys } from '#/minimal-table/min-table.utils';
 
 type ContextKey = RequiredDataProps['id'];
 
 export type SelectedKeysContextType<TKey extends ContextKey> = {
-  addKey: (key: TKey) => void;
-  removeKey: (key: TKey) => void;
+  add: (key: TKey | TKey[]) => void;
+  remove: (key: TKey | TKey[]) => void;
   toggleKey: (key: TKey) => void;
   registerRef: (key: ContextKey, inputRef: HTMLInputElement | null) => void;
   removeRef: (key: ContextKey) => void;
+  clear: () => void;
 };
 
 const initialContextValue: SelectedKeysContextType<ContextKey> = {
-  addKey: () => null,
-  removeKey: () => null,
+  add: () => null,
+  remove: () => null,
   toggleKey: () => null,
   registerRef: () => null,
   removeRef: () => null,
+  clear: () => null,
 };
 
 const SelectedKeysContext = createContext<SelectedKeysContextType<ContextKey>>(initialContextValue);
@@ -51,68 +50,83 @@ function SelectedKeysProviderComponent(
   { children, onSelectedKeysUpdated }: SelectedKeysProviderProps,
   ref: ForwardedRef<SelectedKeysContextType<ContextKey>>,
 ) {
-  // TODO: rozdziel to na 2 konteksty bo syf sie robi
-  const [selectedKeys, setSelectedKeys] = useState<ContextKey[]>([]);
-  const checkboxRefBag = useRef<Record<ContextKey, HTMLInputElement | null>>({});
+  const selectedKeysRef = useRef(new Set<ContextKey>());
+  const checkboxRefBag = useRef(new Map<ContextKey, HTMLInputElement>());
 
-  useEffect(() => {
-    const registeredInputs = checkboxRefBag.current;
-    if (!registeredInputs) return;
+  const selectedKeysUpdated = useCallback(() => {
+    [...checkboxRefBag.current.entries()].forEach(([entryId, checkbox]) => {
+      // eslint-disable-next-line no-param-reassign
+      checkbox.checked = selectedKeysRef.current.has(entryId);
+    });
+    onSelectedKeysUpdated([...selectedKeysRef.current]);
+  }, [onSelectedKeysUpdated]);
 
-    // TODO: Refactor this piece of shit
-    const allKeys = Object.keys(registeredInputs).map((key) => Number(key));
-    console.log('=>(selected-id-context.tsx:63) allKeys', allKeys);
-    const checkedKeys = [...selectedKeys];
-    // eslint-disable-next-line no-restricted-syntax
-    for (const key of selectedKeys) {
-      if (key in registeredInputs) {
-        const checkbox = registeredInputs[key];
-        if (checkbox === null) return;
-        checkbox.checked = true;
-        remove(allKeys, (k) => k === key);
+  const addSingle = useCallback((key: ContextKey) => {
+    if (selectedKeysRef.current.has(key)) return;
+    selectedKeysRef.current.add(key);
+  }, []);
+  const removeSingle = useCallback((key: ContextKey) => {
+    if (!selectedKeysRef.current.has(key)) return;
+    selectedKeysRef.current.delete(key);
+  }, []);
+
+  const add = useCallback(
+    (val: ContextKey | ContextKey[]) => {
+      if (isArray(val)) {
+        val.forEach(addSingle);
+      } else {
+        addSingle(val);
       }
-    }
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const key of allKeys) {
-      if (key in registeredInputs) {
-        const checkbox = registeredInputs[key];
-        if (checkbox === null) return;
-        checkbox.checked = false;
-        remove(allKeys, (k) => k === key);
+      selectedKeysUpdated();
+    },
+    [selectedKeysUpdated, addSingle],
+  );
+
+  const remove = useCallback(
+    (val: ContextKey | ContextKey[]) => {
+      if (isArray(val)) {
+        val.forEach(removeSingle);
+      } else {
+        removeSingle(val);
       }
-    }
 
-    console.log('Synchronization success', allKeys.length === 0);
-  }, [selectedKeys]);
+      selectedKeysUpdated();
+    },
+    [selectedKeysUpdated, removeSingle],
+  );
 
-  useEffect(() => {
-    onSelectedKeysUpdated(selectedKeys);
-  }, [selectedKeys, onSelectedKeysUpdated]);
+  const toggleKey = useCallback(
+    (key: ContextKey) => {
+      const isSelected = selectedKeysRef.current.has(key);
+      if (isSelected) {
+        remove(key);
+      } else {
+        add(key);
+      }
+      selectedKeysUpdated();
+    },
+    [add, remove, selectedKeysUpdated],
+  );
 
-  const addKey = useCallback((key: ContextKey) => {
-    setSelectedKeys((prevKeys) => [...prevKeys, key]);
-  }, []);
-
-  const removeKey = useCallback((key: ContextKey) => {
-    setSelectedKeys((prevKeys) => prevKeys.filter((k) => k !== key));
-  }, []);
-
-  const toggleKey = useCallback((key: ContextKey) => {
-    setSelectedKeys((prevKeys) => (prevKeys.includes(key) ? prevKeys.filter((k) => k !== key) : [...prevKeys, key]));
-  }, []);
+  const clear = useCallback(() => {
+    selectedKeysRef.current.clear();
+    selectedKeysUpdated();
+  }, [selectedKeysUpdated]);
 
   const registerRef = useCallback((key: ContextKey, inputRef: HTMLInputElement | null) => {
-    checkboxRefBag.current[key] = inputRef;
+    if (inputRef === null) return;
+
+    checkboxRefBag.current.set(key, inputRef);
   }, []);
 
   const removeRef = useCallback((key: ContextKey) => {
-    delete checkboxRefBag.current[key];
+    checkboxRefBag.current.delete(key);
   }, []);
 
   const contextMethods = useMemo(
-    () => ({ addKey, removeKey, toggleKey, registerRef, removeRef }),
-    [addKey, removeKey, toggleKey, registerRef, removeRef],
+    () => ({ add, remove, toggleKey, registerRef, removeRef, clear }),
+    [add, remove, toggleKey, registerRef, removeRef, clear],
   );
 
   useImperativeHandle(ref, () => contextMethods, [contextMethods]);

@@ -41,6 +41,5 @@ yarn-error.log*
 # Built Visual Studio Code Extensions
 **/*.vsix
 
-packages/zui-styles/dist/
 
-packages/recipes/
+recipes/
