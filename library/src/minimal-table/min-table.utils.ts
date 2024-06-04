@@ -17,8 +17,13 @@ const isLayoutFluid = (layoutProps: LayoutTableProps): layoutProps is FluidLayou
   layoutProps.$layoutType === 'fluid';
 
 export const getTableContainer = (
-  props: LayoutTableProps,
-): [ComponentType<LayoutTableProps>, FixedLayoutTableProps | FluidLayoutTableProps] => {
+  props?: LayoutTableProps,
+): [ComponentType<LayoutTableProps>, Readonly<FixedLayoutTableProps | FluidLayoutTableProps>] => {
+  if (!props) {
+    const fluidProps: FluidLayoutTableProps = { $layoutType: 'fluid' };
+    return [FluidLayoutContainer, fluidProps];
+  }
+
   if (isLayoutFixed(props)) {
     const { $width } = props;
     const fixedProps: FixedLayoutTableProps = { $layoutType: 'fixed', $width };

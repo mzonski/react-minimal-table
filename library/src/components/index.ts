@@ -1,5 +1,5 @@
-import Badge from './badge/Badge';
-import type { BadgeProps } from './badge/Badge';
+import Badge from './Badge';
+import type { BadgeProps } from './Badge';
 import Box from './containers/Box';
 import type { BoxProps } from './containers/Box';
 import FlexBox from './containers/FlexBox';

@@ -19,7 +19,7 @@ export type FluidLayoutTableProps = BaseLayoutTableProps &
   PrefixPropsWithDolar<
     {
       layoutType: 'fluid';
-    } & Required<Pick<CSSProperties, 'minWidth' | 'maxWidth'>>
+    } & Pick<CSSProperties, 'minWidth' | 'maxWidth'>
   >;
 
 export type LayoutTableProps = FixedLayoutTableProps | FluidLayoutTableProps;

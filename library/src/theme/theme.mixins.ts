@@ -50,7 +50,7 @@ export const spacingMixin = (
     ${applySpacing}
   `;
 };
-export const colorMixin = (type: 'bgColor' | 'color', color: Autocomplete<ThemeColors>) => {
+export const colorMixin = (type: 'bgColor' | 'color' | 'accent', color: Autocomplete<ThemeColors>) => {
   const colorValue = (props: ExecutionContext) => props.theme.colors[color];
 
   const applyColor = (props: ExecutionContext) => {
@@ -60,6 +60,8 @@ export const colorMixin = (type: 'bgColor' | 'color', color: Autocomplete<ThemeC
         return `background-color: ${selectedColor};`;
       case 'color':
         return `color: ${selectedColor};`;
+      case 'accent':
+        return `accent-color: ${selectedColor};`;
       default:
         throw new Error(`Selected color not supported: ${type}`);
     }

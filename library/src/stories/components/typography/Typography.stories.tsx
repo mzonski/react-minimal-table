@@ -2,6 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import component from '../../../components/typography/Typography';
 import { theme } from '#/theme';
 import { TypographyProps } from '#/components/typography/Typography.types';
+import { DUMMY_MESSAGE } from '#/utility/const';
 
 const meta = {
   title: 'Components/Typography',
@@ -25,7 +26,7 @@ export const Heading: Story = {
     type: 'head',
     variant: 'h4',
     weight: 'normal',
-    children: 'Zażółć gęślą jaźń',
+    children: DUMMY_MESSAGE,
   } as TypographyProps,
   argTypes: {
     variant: {
@@ -40,7 +41,7 @@ export const Text: Story = {
     type: 'text',
     variant: 'md',
     weight: 'bold',
-    children: 'Zażółć gęślą jaźń',
+    children: DUMMY_MESSAGE,
   } as TypographyProps,
   argTypes: {
     variant: {

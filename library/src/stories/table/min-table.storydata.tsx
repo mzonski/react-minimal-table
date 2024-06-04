@@ -4,7 +4,7 @@ import { ValuesType } from 'utility-types';
 import { TableProps } from '#/minimal-table/min-table';
 import { convertListToRecord } from '#/utility/converters';
 import { HeaderOptions } from '#/minimal-table/types';
-import Badge from '#/components/badge/Badge';
+import Badge from '#/components/Badge';
 
 const paymentStatuses = {
   Pending: 'pending',

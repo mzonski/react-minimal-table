@@ -1,11 +1,11 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { theme } from '#/theme';
-import type { BadgeProps } from '#/components/badge/Badge';
-import component from '#/components/badge/Badge';
+import type { BadgeProps } from '#/components/Badge';
+import component from '#/components/Badge';
 
 const meta = {
-  title: 'Components/Badge',
+  title: 'Components',
   component,
   parameters: {
     layout: 'centered',

@@ -16,7 +16,7 @@ const StyledBadge = styled.span<BadgeProps>`
     return css`
       ${colorMixin('bgColor', props.$bgColor)}
       ${colorMixin('color', props.$color)}
-      ${borderMixin(props.$border || 'small', 'all', true)}
+      ${borderMixin(props.$border ?? 'small', 'all', true)}
       ${spacingMixin('padding', props.$dense ? 'small' : 'medium', ['horizontal'])}
       ${spacingMixin('padding', props.$dense ? 'tiny' : 'small', ['vertical'])}
       ${textTypographyMixin('md', 'medium')}

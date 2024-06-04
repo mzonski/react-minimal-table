@@ -2,10 +2,9 @@ import React, { Fragment } from "react";
 import { Meta, Typeset } from "@storybook/blocks";
 import { theme } from "../../../theme/theme";
 import { valueToRem, remToPx, convertToNumber } from "../../../theme/theme.utils";
+import { DUMMY_MESSAGE } from '#/utility/const';
 
 <Meta title="Components/Typography/All Text" />
-
-export const SampleText = 'Zażółć gęślą jaźń. Lorem ipsum sit dolor amet.';
 
 {Object.entries(theme.fonts.weights).map(([weightType, weight]) => (
    <Fragment key={weightType}>
@@ -15,7 +14,7 @@ export const SampleText = 'Zażółć gęślą jaźń. Lorem ipsum sit dolor ame
      <Typeset
        fontSizes={Object.values(theme.components.typography.text).map((value) => remToPx(value.fontSize))}
        fontWeight={weight}
-       sampleText={SampleText}
+       sampleText={DUMMY_MESSAGE}
        fontFamily={theme.fonts.defaultFamily}
      />
    </Fragment>

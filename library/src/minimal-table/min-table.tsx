@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
+import React, { ForwardedRef, forwardRef, RefObject, useImperativeHandle, useRef } from 'react';
 import TableThemeProvider from '../theme/ThemeProvider';
 import type { HeaderOptions, LayoutTableProps, RequiredDataProps } from './types';
 import { getTableContainer } from './min-table.utils';
@@ -7,34 +7,28 @@ import TableHeader from './table-header/table-header';
 import TableBody from './table-body/table-body';
 import TableFooter from './table-footer/table-footer';
 import {
-  SelectedKeysContextType,
+  SelectedKeysObj,
   SelectedKeysProvider,
   useSelectedKeysContext,
 } from '#/minimal-table/contexts/selected-id-context';
-import { convertMapToRecord } from '#/utility/converters';
 
-export type TableProps<TData extends RequiredDataProps> = {
+type TableListeners<TId extends RequiredDataProps['id'] = RequiredDataProps['id']> = {
+  onSelectionUpdated?: (keys: TId[]) => void;
+};
+
+export type TableProps<
+  TData extends RequiredDataProps,
+  TId extends RequiredDataProps['id'] = RequiredDataProps['id'],
+> = {
   data: TData[];
   summary?: TData;
   headers: Record<number, HeaderOptions<TData>>;
   options: {
-    defaultFilter?: (entry: TData) => boolean;
-    defaultSorter?: (prev: TData, next: TData) => boolean;
-    tableContainerProps: LayoutTableProps;
-    selectable?: {
-      keySelector: (entry: TData) => TData[keyof TData];
-    };
+    tableContainerProps?: LayoutTableProps;
   };
-};
+} & TableListeners<TId>;
 
-// type SelectedIdentityKey = ReturnType<StripUndefined<typeof props.options.selectable>['keySelector']>;
-
-type TableRefObj = SelectedKeysContextType<RequiredDataProps['id']> & {
-  selectedIds: RequiredDataProps['id'][];
-  selectedKeysControl: React.RefObject<SelectedKeysContextType<RequiredDataProps['id']>> | null;
-};
-
-function DummyCheckUncheckAll<TData extends RequiredDataProps>(props: Pick<TableProps<TData>, 'data'>) {
+function DummyCheckUncheckAll<TData extends RequiredDataProps>(props: Readonly<Pick<TableProps<TData>, 'data'>>) {
   const { clear, add } = useSelectedKeysContext();
 
   const handleCheckAll = () => {
@@ -58,30 +52,27 @@ function DummyCheckUncheckAll<TData extends RequiredDataProps>(props: Pick<Table
   );
 }
 
+type TableRefObj = {
+  keySelection: RefObject<SelectedKeysObj>;
+};
+
 function TableComponent<TData extends RequiredDataProps>(props: TableProps<TData>, ref: ForwardedRef<TableRefObj>) {
-  const selectedKeysRef = useRef<SelectedKeysContextType<RequiredDataProps['id']>>(null);
+  const keySelectionRef = useRef<SelectedKeysObj>(null);
   const [TableLayoutContainer, tableContainerElementProps] = getTableContainer(props.options.tableContainerProps);
 
-  // useImperativeHandle(
-  //   ref,
-  //   () => {
-  //     return {
-  //       selectedIds,
-  //       selectedKeysControl: selectedKeysRef,
-  //     } as TableRefObj;
-  //   },
-  //   [selectedIds],
-  // );
+  useImperativeHandle(
+    ref,
+    () => ({
+      keySelection: keySelectionRef,
+    }),
+    [keySelectionRef],
+  );
 
-  const { data, summary, headers } = props;
-
-  const handleUpdateSelectedKey = useCallback((keys: RequiredDataProps['id'][]) => {
-    console.log('Selected keys length', keys.length);
-  }, []);
+  const { data, summary, headers, onSelectionUpdated } = props;
 
   return (
     <TableThemeProvider>
-      <SelectedKeysProvider ref={selectedKeysRef} onSelectedKeysUpdated={handleUpdateSelectedKey}>
+      <SelectedKeysProvider ref={keySelectionRef} onSelectedKeysUpdated={onSelectionUpdated}>
         <DummyCheckUncheckAll data={data} />
         <TableLayoutContainer {...tableContainerElementProps}>
           <StyledTable>

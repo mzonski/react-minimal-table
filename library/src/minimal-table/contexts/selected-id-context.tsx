@@ -3,22 +3,24 @@ import React, {
   ForwardedRef,
   forwardRef,
   PropsWithChildren,
+  RefObject,
   useCallback,
   useContext,
   useImperativeHandle,
   useMemo,
   useRef,
 } from 'react';
-import { isArray } from 'lodash';
+import { isArray, omit } from 'lodash';
 import type { RequiredDataProps } from '../types';
 
 type ContextKey = RequiredDataProps['id'];
+type InputContext = HTMLInputElement | null;
 
 export type SelectedKeysContextType<TKey extends ContextKey> = {
   add: (key: TKey | TKey[]) => void;
   remove: (key: TKey | TKey[]) => void;
   toggleKey: (key: TKey) => void;
-  registerRef: (key: ContextKey, inputRef: HTMLInputElement | null) => void;
+  registerRef: (key: ContextKey, inputRef: InputContext) => void;
   removeRef: (key: ContextKey) => void;
   clear: () => void;
 };
@@ -33,6 +35,7 @@ const initialContextValue: SelectedKeysContextType<ContextKey> = {
 };
 
 const SelectedKeysContext = createContext<SelectedKeysContextType<ContextKey>>(initialContextValue);
+SelectedKeysContext.displayName = 'SelectedKeys';
 
 export const useSelectedKeysContext = () => {
   const context = useContext(SelectedKeysContext);
@@ -43,22 +46,28 @@ export const useSelectedKeysContext = () => {
 };
 
 type SelectedKeysProviderProps = PropsWithChildren & {
-  onSelectedKeysUpdated: (selectedKeys: ContextKey[]) => void;
+  onSelectedKeysUpdated?: (selectedKeys: ContextKey[]) => void;
+};
+
+export type SelectedKeysObj = {
+  data: RefObject<ReadonlySet<ContextKey>>;
+  controls: Omit<SelectedKeysContextType<ContextKey>, 'registerRef' | 'removeRef'>;
 };
 
 function SelectedKeysProviderComponent(
   { children, onSelectedKeysUpdated }: SelectedKeysProviderProps,
-  ref: ForwardedRef<SelectedKeysContextType<ContextKey>>,
+  ref: ForwardedRef<SelectedKeysObj>,
 ) {
   const selectedKeysRef = useRef(new Set<ContextKey>());
-  const checkboxRefBag = useRef(new Map<ContextKey, HTMLInputElement>());
+  const checkboxesRef = useRef(new Map<ContextKey, NonNullable<InputContext>>());
 
   const selectedKeysUpdated = useCallback(() => {
-    [...checkboxRefBag.current.entries()].forEach(([entryId, checkbox]) => {
+    // TODO: It is not performant, it is better to create difference between old and new state and change accordingly, but still works very fast
+    [...checkboxesRef.current.entries()].forEach(([entryId, checkbox]) => {
       // eslint-disable-next-line no-param-reassign
       checkbox.checked = selectedKeysRef.current.has(entryId);
     });
-    onSelectedKeysUpdated([...selectedKeysRef.current]);
+    onSelectedKeysUpdated?.([...selectedKeysRef.current]);
   }, [onSelectedKeysUpdated]);
 
   const addSingle = useCallback((key: ContextKey) => {
@@ -114,14 +123,14 @@ function SelectedKeysProviderComponent(
     selectedKeysUpdated();
   }, [selectedKeysUpdated]);
 
-  const registerRef = useCallback((key: ContextKey, inputRef: HTMLInputElement | null) => {
+  const registerRef = useCallback((key: ContextKey, inputRef: InputContext) => {
     if (inputRef === null) return;
 
-    checkboxRefBag.current.set(key, inputRef);
+    checkboxesRef.current.set(key, inputRef);
   }, []);
 
   const removeRef = useCallback((key: ContextKey) => {
-    checkboxRefBag.current.delete(key);
+    checkboxesRef.current.delete(key);
   }, []);
 
   const contextMethods = useMemo(
@@ -129,7 +138,11 @@ function SelectedKeysProviderComponent(
     [add, remove, toggleKey, registerRef, removeRef, clear],
   );
 
-  useImperativeHandle(ref, () => contextMethods, [contextMethods]);
+  useImperativeHandle(
+    ref,
+    () => ({ data: selectedKeysRef, controls: omit(contextMethods, ['registerRef', 'removeRef']) }),
+    [selectedKeysRef, contextMethods],
+  );
 
   return <SelectedKeysContext.Provider value={contextMethods}>{children}</SelectedKeysContext.Provider>;
 }

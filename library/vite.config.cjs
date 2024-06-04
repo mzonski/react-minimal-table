@@ -7,7 +7,9 @@ export default defineConfig(({ command, mode }) => {
   const isProduction = mode === "production";
 
   return {
-    plugins: [react()],
+    plugins: [react(!isProduction ? {
+      jsxImportSource: '@welldone-software/why-did-you-render',
+    } : undefined)],
     build: {
       lib: {
         entry: {

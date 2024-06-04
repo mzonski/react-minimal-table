@@ -4,6 +4,7 @@ import { TableProps } from '../min-table';
 import { RequiredDataProps } from '../types';
 import { StyledTbody, StyledTd } from '#/minimal-table/table-body/table-body.styles';
 import { useSelectedKeysContext } from '#/minimal-table/contexts/selected-id-context';
+import { StyledCheckbox } from '#/components/Checkbox.styles';
 
 type Props<TData extends RequiredDataProps> = Pick<TableProps<TData>, 'data' | 'headers' | 'options'>;
 
@@ -14,12 +15,15 @@ function TableBody<TData extends RequiredDataProps>({ data, headers }: Readonly<
     return () => data.forEach((entry) => removeRef(entry.id));
   }, [data, removeRef]);
 
-  // xd
   return (
     <StyledTbody>
       {data.map((entry, rowIndex) => (
         <Fragment key={entry.id}>
-          <input ref={(newRef) => registerRef(entry.id, newRef)} type="checkbox" onChange={() => toggleKey(entry.id)} />
+          <StyledCheckbox
+            ref={(newRef) => registerRef(entry.id, newRef)}
+            onChange={() => toggleKey(entry.id)}
+            $size={24}
+          />
           <StyledTr>
             {Object.values(headers).map(({ renderCellContent, ...header }) => {
               const cellData = entry[String(header.dataProp)];
