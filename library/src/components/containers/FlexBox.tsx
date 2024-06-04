@@ -37,4 +37,12 @@ export const FlexBox = styled(Box)<FlexProps>`
   gap: ${(props) => props.$gap};
 `;
 
+export const Stack = styled(FlexBox)<Pick<FlexProps, '$inline' | '$direction' | '$gap'> & { $center?: boolean }>`
+  display: ${(props) => (props.$inline ? 'inline-flex' : 'flex')};
+  flex-direction: ${(props) => props.$direction ?? 'column'};
+  gap: ${(props) => props.$gap ?? '1rem'};
+  justify-content: ${(props) => (props.$center ? 'center' : 'unset')};
+  align-items: ${(props) => (props.$center ? 'center' : 'unset')};
+`;
+
 export default FlexBox;
