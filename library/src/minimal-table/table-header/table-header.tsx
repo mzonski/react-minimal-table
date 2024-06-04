@@ -6,13 +6,14 @@ import { isHeaderContent, isHeaderElement } from '../min-table.utils';
 import { StyledTh, StyledThead } from './table-header.styles';
 import { getTypedEntries } from '#/utility/converters';
 
-type Props<TData extends RequiredDataProps> = Pick<TableProps<TData>, 'headers'>;
+type Props<TData extends RequiredDataProps> = Pick<TableProps<TData>, 'headers'> & { selectable?: boolean };
 
-function TableHeader<TData extends RequiredDataProps>({ headers }: Readonly<Props<TData>>) {
+function TableHeader<TData extends RequiredDataProps>({ headers, selectable }: Readonly<Props<TData>>) {
   // xd
   return (
     <StyledThead>
       <StyledTr>
+        {selectable && <StyledTh $width="40px">&nbsp;</StyledTh>}
         {getTypedEntries(headers).map(([id, headerEntry]) => {
           const { colTextAlign, colSpan, width } = headerEntry;
           return (

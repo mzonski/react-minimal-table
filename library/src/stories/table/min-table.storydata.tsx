@@ -164,5 +164,6 @@ export const fakeTableProps = {
   options: {
     defaultSorter: (prev, next) => prev.id > next.id,
     tableContainerProps: { $layoutType: 'fixed', $width: '400px' },
+    selectable: true,
   },
 } as TableProps<DummyDataProps>;

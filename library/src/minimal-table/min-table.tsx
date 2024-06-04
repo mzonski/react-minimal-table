@@ -25,6 +25,7 @@ export type TableProps<
   headers: Record<number, HeaderOptions<TData>>;
   options: {
     tableContainerProps?: LayoutTableProps;
+    selectable?: boolean;
   };
 } & TableListeners<TId>;
 
@@ -68,7 +69,7 @@ function TableComponent<TData extends RequiredDataProps>(props: TableProps<TData
     [keySelectionRef],
   );
 
-  const { data, summary, headers, onSelectionUpdated } = props;
+  const { data, summary, headers, options, onSelectionUpdated } = props;
 
   return (
     <TableThemeProvider>
@@ -76,8 +77,8 @@ function TableComponent<TData extends RequiredDataProps>(props: TableProps<TData
         <DummyCheckUncheckAll data={data} />
         <TableLayoutContainer {...tableContainerElementProps}>
           <StyledTable>
-            <TableHeader headers={headers} />
-            <TableBody headers={headers} data={data} options={props.options} />
+            <TableHeader headers={headers} selectable={options.selectable} />
+            <TableBody headers={headers} data={data} options={options} />
             {summary && <TableFooter headers={headers} summary={summary} />}
           </StyledTable>
         </TableLayoutContainer>
