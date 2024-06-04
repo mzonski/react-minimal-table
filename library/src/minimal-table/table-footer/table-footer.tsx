@@ -14,7 +14,7 @@ function TableFooter<TData extends RequiredDataProps>({ headers, summary, select
   return (
     <StyledTfoot>
       <TotalRow>
-        {selectable && <StyledTr />}
+        {selectable && <StyledTd />}
         {Object.values(headers).map((header) => {
           return (
             <StyledTd

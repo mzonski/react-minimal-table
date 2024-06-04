@@ -53,7 +53,7 @@ function DummyCheckUncheckAll<TData extends RequiredDataProps>(props: Readonly<P
   );
 }
 
-type TableRefObj = {
+export type TableRefObj = {
   keySelection: RefObject<SelectedKeysObj>;
 };
 
@@ -79,7 +79,7 @@ function TableComponent<TData extends RequiredDataProps>(props: TableProps<TData
           <StyledTable>
             <TableHeader headers={headers} selectable={options.selectable} />
             <TableBody headers={headers} data={data} options={options} />
-            {summary && <TableFooter headers={headers} summary={summary} />}
+            {summary && <TableFooter headers={headers} summary={summary} selectable={options.selectable} />}
           </StyledTable>
         </TableLayoutContainer>
       </SelectedKeysProvider>

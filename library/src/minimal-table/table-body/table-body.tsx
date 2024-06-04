@@ -19,15 +19,16 @@ function TableBody<TData extends RequiredDataProps>({ data, headers, options }: 
     <StyledTbody>
       {data.map((entry, rowIndex) => (
         <Fragment key={entry.id}>
-          {options.selectable && <StyledTr />}
           <StyledTr>
-            <StyledTd key={`${entry.id}-checkbox`}>
-              <StyledCheckbox
-                ref={(newRef) => registerRef(entry.id, newRef)}
-                onChange={() => toggleKey(entry.id)}
-                $size={20}
-              />
-            </StyledTd>
+            {options.selectable && (
+              <StyledTd key={`${entry.id}-checkbox`}>
+                <StyledCheckbox
+                  ref={(newRef) => registerRef(entry.id, newRef)}
+                  onChange={() => toggleKey(entry.id)}
+                  $size={20}
+                />
+              </StyledTd>
+            )}
             {Object.values(headers).map(({ renderCellContent, ...header }) => {
               const cellData = entry[String(header.dataProp)];
               return (

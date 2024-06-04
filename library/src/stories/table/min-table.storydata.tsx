@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 import { ValuesType } from 'utility-types';
 import { TableProps } from '#/minimal-table/min-table';
 import { convertListToRecord } from '#/utility/converters';
-import { HeaderOptions } from '#/minimal-table/types';
+import { HeaderOptions, type RequiredDataProps } from '#/minimal-table/types';
 import Badge from '#/components/Badge';
 
 const paymentStatuses = {
@@ -46,16 +46,19 @@ interface FakeOrder {
   method: PaymentMethod;
 }
 
-let currentId = 1;
+let currentId = 0;
 function generateFakeOrder(): FakeOrder {
   const status = faker.helpers.arrayElement(Object.values(paymentStatuses));
   const method = faker.helpers.arrayElement(Object.values(paymentMethod));
 
+  const nextId = currentId;
+  currentId += 1;
+
   return {
-    id: currentId++,
-    orderId: `Order #${faker.number.int({ min: 100, max: 999 })}`,
+    id: nextId,
+    orderId: `Order #${nextId}`,
     status,
-    amount: faker.finance.amount({ min: 10000, max: 10000000, dec: 2 }),
+    amount: faker.finance.amount({ min: 10, max: 1000, dec: 0 }),
     billingDate: faker.date.future().toLocaleDateString('en-GB'),
     method,
   };
@@ -118,6 +121,17 @@ export const fakeOrdersTableProps = {
     },
     4: {
       type: 'text',
+      name: 'amount',
+      content: 'Amount',
+      dataProp: 'amount',
+      width: '20%',
+      renderCellContent: (idx) => {
+        const { amount } = fakeOrdersList[idx];
+        return `$${amount}`;
+      },
+    },
+    5: {
+      type: 'text',
       name: 'method',
       content: 'Payment method',
       dataProp: 'method',
@@ -126,14 +140,14 @@ export const fakeOrdersTableProps = {
       renderCellContent: (idx) => getPaymentMethodTypeMessage(fakeOrdersList[idx].method),
     },
   },
-  data: [...Object.values(fakeOrdersRecord)],
+  data: fakeOrdersList,
   options: {
     tableContainerProps: { $layoutType: 'fixed', $width: '800px' },
+    selectable: true,
   },
 } as TableProps<FakeOrder>;
 
-export type DummyDataProps = {
-  id: number;
+export type DummyDataProps = RequiredDataProps & {
   service: string;
   cost: number;
   revenue: number;
@@ -162,7 +176,6 @@ export const fakeTableProps = {
   ],
   summary: { id: 1, service: 'Total', cost: 750, revenue: 2137, balance: 250 },
   options: {
-    defaultSorter: (prev, next) => prev.id > next.id,
     tableContainerProps: { $layoutType: 'fixed', $width: '400px' },
     selectable: true,
   },
