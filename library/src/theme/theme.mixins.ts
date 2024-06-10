@@ -10,40 +10,40 @@ import type {
   ThemeTypographyTexts,
 } from '#/typings';
 
-type MoveType = 'margin' | 'padding';
-type Corners = 'top' | 'left' | 'right' | 'bottom' | 'vertical' | 'horizontal' | 'all';
+export type MoveType = 'margin' | 'padding';
+export type Corners = 'top' | 'left' | 'right' | 'bottom' | 'vertical' | 'horizontal' | 'all';
 
-export const spacingMixin = (
-  type: MoveType,
-  themeSpacing: Autocomplete<ThemeSpacings>,
-  corners: Corners[] = ['all'],
-) => {
+export const mapSpacingCornetToCssProperties = (type: MoveType, selectedSpacing: string, corners: Corners[] = ['all']) => {
+  return corners
+    .map((corner) => {
+      switch (corner) {
+        case 'top':
+          return `${type}-top: ${selectedSpacing};`;
+        case 'left':
+          return `${type}-left: ${selectedSpacing};`;
+        case 'right':
+          return `${type}-right: ${selectedSpacing};`;
+        case 'bottom':
+          return `${type}-bottom: ${selectedSpacing};`;
+        case 'vertical':
+          return `${type}-top: ${selectedSpacing}; ${type}-bottom: ${selectedSpacing};`;
+        case 'horizontal':
+          return `${type}-left: ${selectedSpacing}; ${type}-right: ${selectedSpacing};`;
+        case 'all':
+          return `${type}: ${selectedSpacing};`;
+        default:
+          throw new Error(`Selected corner not supported: ${corner}`);
+      }
+    })
+    .join(' ');
+}
+
+export const spacingMixin = (type: MoveType, themeSpacing: ThemeSpacings, corners: Corners[] = ['all']) => {
   const spacingValue = (props: ExecutionContext) => props.theme.spacing[themeSpacing];
 
   const applySpacing = (props: ExecutionContext) => {
     const selectedSpacing = spacingValue(props);
-    return corners
-      .map((corner) => {
-        switch (corner) {
-          case 'top':
-            return `${type}-top: ${selectedSpacing};`;
-          case 'left':
-            return `${type}-left: ${selectedSpacing};`;
-          case 'right':
-            return `${type}-right: ${selectedSpacing};`;
-          case 'bottom':
-            return `${type}-bottom: ${selectedSpacing};`;
-          case 'vertical':
-            return `${type}-top: ${selectedSpacing}; ${type}-bottom: ${selectedSpacing};`;
-          case 'horizontal':
-            return `${type}-left: ${selectedSpacing}; ${type}-right: ${selectedSpacing};`;
-          case 'all':
-            return `${type}: ${selectedSpacing};`;
-          default:
-            throw new Error(`Selected corner not supported: ${corner}`);
-        }
-      })
-      .join(' ');
+    return mapSpacingCornetToCssProperties(type, selectedSpacing, corners);
   };
 
   return css`

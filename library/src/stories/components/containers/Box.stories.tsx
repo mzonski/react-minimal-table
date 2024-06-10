@@ -1,4 +1,3 @@
-/*
 import component from '#/components/containers/FlexBox';
 import { theme } from '#/theme';
 
@@ -37,5 +36,3 @@ export default {
 };
 
 export const FlexBox = {};
-*/
-export default {};

@@ -59,10 +59,12 @@ export const theme = {
     },
   },
   spacing: {
-    tiny: '2px',
-    small: '4px',
-    medium: '8px',
-    large: '16px',
+    1: '2px',
+    2: '4px',
+    3: '8px',
+    4: '16px',
+    5: '32px',
+    6: '64px',
   },
   fonts: {
     defaultSize: `${DEFAULT_FONT_SIZE}px`,

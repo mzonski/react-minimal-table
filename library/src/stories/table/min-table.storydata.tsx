@@ -37,7 +37,7 @@ function getPaymentMethodTypeMessage(method: PaymentMethod) {
   }
 }
 
-interface FakeOrder {
+interface FakeOrder extends RequiredDataProps {
   id: number;
   orderId: string;
   status: PaymentStatus;
@@ -97,6 +97,28 @@ function PaymentStatusBadge({ status }: { status: PaymentStatus }) {
   }
 }
 
+/*
+type BaseHeaderOptions<TData extends RequiredDataProps> = {
+
+};
+
+export type HeaderContentOptions<TData extends RequiredDataProps> = BaseHeaderOptions<TData> & {
+  type: 'text';
+  content: string;
+  name: string;
+  colSpan?: number;
+  dataProp: keyof TData;
+};
+
+export type HeaderRendererOptions<TData extends RequiredDataProps> = BaseHeaderOptions<TData> & {
+  type: 'element';
+  renderHeaderContent: (headerIndex: number) => ReactNode;
+  name: string;
+  colSpan?: number;
+  dataProp: keyof TData;
+};
+ */
+
 export const fakeOrdersTableProps = {
   headers: {
     1: { type: 'text', name: 'order', content: 'Order', width: '35%', colTextAlign: 'left', dataProp: 'orderId' },
@@ -139,7 +161,7 @@ export const fakeOrdersTableProps = {
       colTextAlign: 'right',
       renderCellContent: (idx) => getPaymentMethodTypeMessage(fakeOrdersList[idx].method),
     },
-  },
+  } as Record<number, HeaderOptions<FakeOrder>>,
   data: fakeOrdersList,
   options: {
     tableContainerProps: { $layoutType: 'fixed', $width: '800px' },

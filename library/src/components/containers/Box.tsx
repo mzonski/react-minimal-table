@@ -1,20 +1,12 @@
 import React, { ElementType } from 'react';
-import styled from 'styled-components';
-import { spacingMixin } from '#/theme/theme.mixins';
-import type { PolymorphicComponentProp, ThemeSpacings } from '#/typings';
+import type { PolymorphicComponentProp } from '#/typings';
 
-type DefaultBoxProps = { $padding?: ThemeSpacings; $margin?: ThemeSpacings };
-export type BoxProps<C extends ElementType = 'div'> = PolymorphicComponentProp<C, DefaultBoxProps>;
+export type BoxProps<C extends ElementType = 'div'> = PolymorphicComponentProp<C>;
 
-const StyledBox = styled.div<DefaultBoxProps>`
-  ${(props) => props.$padding && spacingMixin('padding', props.$padding)}
-  ${(props) => props.$margin && spacingMixin('margin', props.$margin)}
-`;
-
-function Box<C extends ElementType = 'div'>({ $as, padding, margin, children, ...rest }: BoxProps<C>) {
-  const Component = $as ?? StyledBox;
+function Box<C extends ElementType = 'div'>({ $as, children, ...rest }: BoxProps<C>) {
+  const Component = $as ?? 'div';
   return (
-    <Component $as={$as} $padding={padding} $margin={margin} {...rest}>
+    <Component $as={$as} {...rest}>
       {children}
     </Component>
   );

@@ -36,7 +36,15 @@ export const WithSync = () => {
   return (
     <Stack $center>
       <button onClick={pickRandom}>toggle random</button>
-      <MinTable {...fakeOrdersTableProps} ref={tableRef} onSelectionUpdated={selectionChangeListener} />
+      <MinTable
+        ref={tableRef}
+        onSelectionUpdated={selectionChangeListener}
+        data={fakeOrdersTableProps.data}
+        options={fakeOrdersTableProps.options}
+        headers={{
+          1: { type: 'text', name: 'order', content: 'Order', width: '35%', colTextAlign: 'left', dataProp: 'orderId' },
+        }}
+      />
     </Stack>
   );
 };
