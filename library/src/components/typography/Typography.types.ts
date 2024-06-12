@@ -1,21 +1,23 @@
-import React, { PropsWithChildren } from 'react';
+import { ElementType, PropsWithChildren } from 'react';
 
-import type { ThemeFontWeights, ThemeTypographyHeads, ThemeTypographyTexts } from '#/typings';
+import type { PrefixPropsWithDolar, ThemeFontWeights, ThemeTypographyHeads, ThemeTypographyTexts } from '#/typings';
 
 // TODO: Do I need to add React.HTMLAttributes<HTMLElement>?
-export type BaseTypographyProps = PropsWithChildren & {
-  as?: React.ElementType;
-  weight: ThemeFontWeights;
-};
+export type BaseTypographyProps = PropsWithChildren &
+  PrefixPropsWithDolar<{
+    weight?: ThemeFontWeights;
+  }> & { as?: ElementType };
 
-export type HeadingProps = BaseTypographyProps & {
-  type: 'head';
-  variant: ThemeTypographyHeads;
-};
+export type HeadingProps = BaseTypographyProps &
+  PrefixPropsWithDolar<{
+    type: 'head';
+    variant: ThemeTypographyHeads;
+  }>;
 
-export type TextProps = BaseTypographyProps & {
-  type: 'text';
-  variant: ThemeTypographyTexts;
-};
+export type TextProps = BaseTypographyProps &
+  PrefixPropsWithDolar<{
+    type: 'text';
+    variant: ThemeTypographyTexts;
+  }>;
 
 export type TypographyProps = HeadingProps | TextProps;

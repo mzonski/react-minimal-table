@@ -1,7 +1,7 @@
 import React from 'react';
 
 export type AsProp<C extends React.ElementType> = {
-  $as?: C;
+  as?: C;
 };
 
 export type PropsToOmit<C extends React.ElementType, P> = keyof (AsProp<C> & P);

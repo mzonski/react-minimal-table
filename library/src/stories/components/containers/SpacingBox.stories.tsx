@@ -1,13 +1,9 @@
-import { useRef } from 'react';
-import { Meta, StoryObj } from '@storybook/react';
-import component from '#/components/containers/SpacingBox';
-import { CheckboxObj } from '#/components/Checkbox';
-import { Stack } from '#/components/containers/FlexBox';
+import { Meta } from '@storybook/react';
+import styled from 'styled-components';
+import component, { SpacingBoxProps } from '#/components/containers/SpacingBox';
 import { DUMMY_MESSAGE } from '#/utility/const';
-
-// const Wrapper = (props: SpacingBoxProps) => {
-//   return <Component {...props}>{DUMMY_MESSAGE}</Component>;
-// };
+import Heading from '#/components/typography/Heading';
+import { theme } from '#/theme';
 
 const meta = {
   title: 'Components/Containers',
@@ -16,36 +12,58 @@ const meta = {
     layout: 'none',
   },
   argTypes: {
-    $as: {
+    children: { table: { disable: true } },
+    as: {
       control: 'select',
       options: ['div', 'span', 'p'],
     },
     $mh: {
-      control: 'number',
+      control: 'select',
+      options: Object.keys(theme.spacing),
     },
     $mt: {
-      control: 'number',
+      control: 'select',
+      options: Object.keys(theme.spacing),
     },
     $mb: {
-      control: 'number',
+      control: 'select',
+      options: Object.keys(theme.spacing),
+    },
+    $ph: {
+      control: 'select',
+      options: Object.keys(theme.spacing),
+    },
+    $pt: {
+      control: 'select',
+      options: Object.keys(theme.spacing),
+    },
+    $pb: {
+      control: 'select',
+      options: Object.keys(theme.spacing),
     },
   },
 } satisfies Meta<typeof component>;
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+const DisplayElement = styled(component)`
+  background-image: linear-gradient(to bottom, #4adc7f 0%, #4adc7f 100%),
+    linear-gradient(to bottom, #f56565 0%, #f56565 100%);
+  background-clip: content-box, padding-box;
+`;
 
-const Element = component;
-export const SpacingBox: Story = ({ ...args }: Story['args']) => {
-  return <Element {...args} />;
+export const SpacingBox = (props: SpacingBoxProps) => {
+  return <DisplayElement {...props} />;
 };
 
 SpacingBox.args = {
-  $as: 'div',
-  $mh: 2,
-  $mt: 5,
-  $mb: 4,
-  children: DUMMY_MESSAGE,
+  as: 'div',
+  $mh: 0.5,
+  $mt: 'px',
+  $mb: 56,
+  $ph: 44,
+  $pt: 10,
+  $pb: 24,
+  children: <Heading $variant="h3">{DUMMY_MESSAGE}</Heading>,
 };
 
 // TODO: ogarnij jak przekazywać parametry

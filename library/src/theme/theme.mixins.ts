@@ -8,12 +8,17 @@ import type {
   ThemeSpacings,
   ThemeTypographyHeads,
   ThemeTypographyTexts,
+  ValidSizeFormat,
 } from '#/typings';
 
 export type MoveType = 'margin' | 'padding';
 export type Corners = 'top' | 'left' | 'right' | 'bottom' | 'vertical' | 'horizontal' | 'all';
 
-export const mapSpacingCornetToCssProperties = (type: MoveType, selectedSpacing: string, corners: Corners[] = ['all']) => {
+export const mapSpacingCornersToCssProperties = (
+  type: MoveType,
+  selectedSpacing: ValidSizeFormat,
+  corners: Corners[] = ['all'],
+) => {
   return corners
     .map((corner) => {
       switch (corner) {
@@ -36,14 +41,14 @@ export const mapSpacingCornetToCssProperties = (type: MoveType, selectedSpacing:
       }
     })
     .join(' ');
-}
+};
 
 export const spacingMixin = (type: MoveType, themeSpacing: ThemeSpacings, corners: Corners[] = ['all']) => {
   const spacingValue = (props: ExecutionContext) => props.theme.spacing[themeSpacing];
 
   const applySpacing = (props: ExecutionContext) => {
     const selectedSpacing = spacingValue(props);
-    return mapSpacingCornetToCssProperties(type, selectedSpacing, corners);
+    return mapSpacingCornersToCssProperties(type, selectedSpacing, corners);
   };
 
   return css`

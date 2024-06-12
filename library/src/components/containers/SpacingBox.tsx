@@ -1,11 +1,39 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { ElementType } from 'react';
 import styled, { css, ExecutionContext } from 'styled-components';
-
 import Box, { BoxProps } from './Box';
 import type { PrefixPropsWithDolar, ThemeSpacings } from '#/typings';
-import { mapSpacingCornetToCssProperties } from '#/theme';
+import { mapSpacingCornersToCssProperties } from '#/theme';
 import type { Only, RequireAtLeastOne } from '#/utility/objects';
+
+type PaddingTopBottomProps = RequireAtLeastOne<
+  PrefixPropsWithDolar<{
+    pt: ThemeSpacings; // padding-top
+    pb: ThemeSpacings; // padding-bottom
+  }>
+>;
+
+type PaddingLeftRightProps = RequireAtLeastOne<
+  PrefixPropsWithDolar<{
+    pl: ThemeSpacings; // padding-left
+    pr: ThemeSpacings; // padding-right
+  }>
+>;
+
+type PaddingHorizontalType = PrefixPropsWithDolar<{
+  ph: ThemeSpacings; // padding-left + padding-right
+}>;
+
+type PaddingVerticalType = PrefixPropsWithDolar<{
+  pv: ThemeSpacings; // padding-top + padding-bottom
+}>;
+
+type PaddingAroundProps = Only<
+  PaddingTopBottomProps & PaddingLeftRightProps,
+  PaddingVerticalType & PaddingHorizontalType
+>;
+type VerticalPaddingProps = PaddingVerticalType & PaddingLeftRightProps;
+type HorizontalPaddingProps = PaddingHorizontalType & PaddingTopBottomProps;
+type PaddingProps = PaddingAroundProps | VerticalPaddingProps | HorizontalPaddingProps;
 
 type MarginTopBottomProps = RequireAtLeastOne<
   PrefixPropsWithDolar<{
@@ -34,9 +62,7 @@ type VerticalMarginProps = MarginVerticalType & MarginLeftRightProps;
 type HorizontalMarginProps = MarginHorizontalType & MarginTopBottomProps;
 type MarginProps = MarginAroundProps | VerticalMarginProps | HorizontalMarginProps;
 
-type SpacingProps = MarginProps;
-
-export const isMarginAroundProps = (props: MarginProps): props is MarginAroundProps => {
+const isMarginAroundProps = (props: object): props is MarginAroundProps => {
   if ('$mh' in props || '$mv' in props) {
     return false;
   }
@@ -44,7 +70,7 @@ export const isMarginAroundProps = (props: MarginProps): props is MarginAroundPr
   return '$mt' in props || '$mb' in props || '$ml' in props || '$mr' in props;
 };
 
-export const isVerticalMarginProps = (props: object): props is VerticalMarginProps => {
+const isVerticalMarginProps = (props: object): props is VerticalMarginProps => {
   if ('$mt' in props || '$mb' in props) {
     return false;
   }
@@ -52,7 +78,7 @@ export const isVerticalMarginProps = (props: object): props is VerticalMarginPro
   return '$mv' in props;
 };
 
-export const isHorizontalMarginProps = (props: object): props is HorizontalMarginProps => {
+const isHorizontalMarginProps = (props: object): props is HorizontalMarginProps => {
   if ('$ml' in props || '$mr' in props) {
     return false;
   }
@@ -60,57 +86,116 @@ export const isHorizontalMarginProps = (props: object): props is HorizontalMargi
   return '$mh' in props;
 };
 
-export type SpacingBoxProps<C extends ElementType = 'div'> = BoxProps<C> & MarginProps;
+const isPaddingAroundProps = (props: object): props is PaddingAroundProps => {
+  if ('$ph' in props || '$pv' in props) {
+    return false;
+  }
 
-export const marginMixin2 = (props: MarginProps) => {
+  return '$pt' in props || '$pb' in props || '$pl' in props || '$pr' in props;
+};
+
+const isVerticalPaddingProps = (props: object): props is VerticalPaddingProps => {
+  if ('$pt' in props || '$pb' in props) {
+    return false;
+  }
+
+  return '$pv' in props;
+};
+
+const isHorizontalPaddingProps = (props: object): props is HorizontalPaddingProps => {
+  if ('$pl' in props || '$pr' in props) {
+    return false;
+  }
+
+  return '$ph' in props;
+};
+
+export const spacingMixin = (props: MarginProps) => {
   const spacingValue = (styledCtx: ExecutionContext, themeSpacing: ThemeSpacings) =>
-    styledCtx.theme.spacing[themeSpacing];
+    styledCtx.theme.spacing[themeSpacing] ?? 0;
 
   const applySpacing = (styledCtx: ExecutionContext) => {
     const cssFragments: string[] = [];
     const getSpacing = (themeSpacing: ThemeSpacings) => spacingValue(styledCtx, themeSpacing);
 
     if (isMarginAroundProps(props)) {
-      // TODO: switch object keys?
       if (props.$mt) {
-        cssFragments.push(mapSpacingCornetToCssProperties('margin', getSpacing(props.$mt), ['top']));
+        cssFragments.push(mapSpacingCornersToCssProperties('margin', getSpacing(props.$mt), ['top']));
       }
       if (props.$mb) {
-        cssFragments.push(mapSpacingCornetToCssProperties('margin', getSpacing(props.$mb), ['bottom']));
+        cssFragments.push(mapSpacingCornersToCssProperties('margin', getSpacing(props.$mb), ['bottom']));
       }
       if (props.$ml) {
-        cssFragments.push(mapSpacingCornetToCssProperties('margin', getSpacing(props.$ml), ['left']));
+        cssFragments.push(mapSpacingCornersToCssProperties('margin', getSpacing(props.$ml), ['left']));
       }
       if (props.$mr) {
-        cssFragments.push(mapSpacingCornetToCssProperties('margin', getSpacing(props.$mr), ['right']));
+        cssFragments.push(mapSpacingCornersToCssProperties('margin', getSpacing(props.$mr), ['right']));
       }
     }
 
     if (isVerticalMarginProps(props)) {
       if (props.$mv) {
-        cssFragments.push(mapSpacingCornetToCssProperties('margin', getSpacing(props.$mv), ['top', 'bottom']));
+        cssFragments.push(mapSpacingCornersToCssProperties('margin', getSpacing(props.$mv), ['top', 'bottom']));
       }
       if (props.$ml) {
-        cssFragments.push(mapSpacingCornetToCssProperties('margin', getSpacing(props.$ml), ['left']));
+        cssFragments.push(mapSpacingCornersToCssProperties('margin', getSpacing(props.$ml), ['left']));
       }
       if (props.$mr) {
-        cssFragments.push(mapSpacingCornetToCssProperties('margin', getSpacing(props.$mr), ['right']));
+        cssFragments.push(mapSpacingCornersToCssProperties('margin', getSpacing(props.$mr), ['right']));
       }
     }
 
     if (isHorizontalMarginProps(props)) {
       if (props.$mh) {
-        cssFragments.push(mapSpacingCornetToCssProperties('margin', getSpacing(props.$mh), ['left', 'right']));
+        cssFragments.push(mapSpacingCornersToCssProperties('margin', getSpacing(props.$mh), ['left', 'right']));
       }
       if (props.$mt) {
-        cssFragments.push(mapSpacingCornetToCssProperties('margin', getSpacing(props.$mt), ['top']));
+        cssFragments.push(mapSpacingCornersToCssProperties('margin', getSpacing(props.$mt), ['top']));
       }
       if (props.$mb) {
-        cssFragments.push(mapSpacingCornetToCssProperties('margin', getSpacing(props.$mb), ['bottom']));
+        cssFragments.push(mapSpacingCornersToCssProperties('margin', getSpacing(props.$mb), ['bottom']));
       }
     }
 
-    console.log('=>(SpacingBox.tsx:114) cssFragments', cssFragments);
+    if (isPaddingAroundProps(props)) {
+      if (props.$pt) {
+        cssFragments.push(mapSpacingCornersToCssProperties('padding', getSpacing(props.$pt), ['top']));
+      }
+      if (props.$pb) {
+        cssFragments.push(mapSpacingCornersToCssProperties('padding', getSpacing(props.$pb), ['bottom']));
+      }
+      if (props.$pl) {
+        cssFragments.push(mapSpacingCornersToCssProperties('padding', getSpacing(props.$pl), ['left']));
+      }
+      if (props.$pr) {
+        cssFragments.push(mapSpacingCornersToCssProperties('padding', getSpacing(props.$pr), ['right']));
+      }
+    }
+
+    if (isVerticalPaddingProps(props)) {
+      if (props.$pv) {
+        cssFragments.push(mapSpacingCornersToCssProperties('padding', getSpacing(props.$pv), ['top', 'bottom']));
+      }
+      if (props.$pl) {
+        cssFragments.push(mapSpacingCornersToCssProperties('padding', getSpacing(props.$pl), ['left']));
+      }
+      if (props.$pr) {
+        cssFragments.push(mapSpacingCornersToCssProperties('padding', getSpacing(props.$pr), ['right']));
+      }
+    }
+
+    if (isHorizontalPaddingProps(props)) {
+      if (props.$ph) {
+        cssFragments.push(mapSpacingCornersToCssProperties('padding', getSpacing(props.$ph), ['left', 'right']));
+      }
+      if (props.$pt) {
+        cssFragments.push(mapSpacingCornersToCssProperties('padding', getSpacing(props.$pt), ['top']));
+      }
+      if (props.$pb) {
+        cssFragments.push(mapSpacingCornersToCssProperties('padding', getSpacing(props.$pb), ['bottom']));
+      }
+    }
+
     return cssFragments.join(' ');
   };
 
@@ -118,58 +203,11 @@ export const marginMixin2 = (props: MarginProps) => {
     ${applySpacing}
   `;
 };
-//
-// const getMarginStyle = (props: MarginProps) => {
-//   console.log('=>(SpacingBox.tsx:67) props', props);
-//   const cssFragments: string[] = [];
-//
-//   if (isMarginAroundProps(props)) {
-//     // TODO: switch object keys?
-//     if (props.$mt) {
-//       cssFragments.push(mapSpacingCornetToCssProperties('margin', props.$mt, ['top']));
-//     }
-//     if (props.$mb) {
-//       cssFragments.push(spacingMixin('margin', props.$mb, ['bottom']));
-//     }
-//     if (props.$ml) {
-//       cssFragments.push(spacingMixin('margin', props.$ml, ['left']));
-//     }
-//     if (props.$mr) {
-//       cssFragments.push(spacingMixin('margin', props.$mr, ['right']));
-//     }
-//   }
-//
-//   if (isVerticalMarginProps(props)) {
-//     if (props.$mv) {
-//       cssFragments.push(spacingMixin('margin', props.$mv, ['top', 'bottom']));
-//     }
-//     if (props.$ml) {
-//       cssFragments.push(spacingMixin('margin', props.$ml, ['left']));
-//     }
-//     if (props.$mr) {
-//       cssFragments.push(spacingMixin('margin', props.$mr, ['right']));
-//     }
-//   }
-//
-//   if (isHorizontalMarginProps(props)) {
-//     if (props.$mh) {
-//       cssFragments.push(spacingMixin('margin', props.$mh, ['left', 'right']));
-//     }
-//     if (props.$mt) {
-//       cssFragments.push(spacingMixin('margin', props.$mt, ['top']));
-//     }
-//     if (props.$mb) {
-//       cssFragments.push(spacingMixin('margin', props.$mb, ['bottom']));
-//     }
-//   }
-//
-//   return css`
-//     ${cssFragments}
-//   `;
-// };
+
+export type SpacingBoxProps<C extends ElementType = 'div'> = BoxProps<C> & MarginProps & PaddingProps;
 
 const SpacingBox = styled(Box)<SpacingBoxProps>`
-  ${marginMixin2}
+  ${spacingMixin}
 `;
 
 export default SpacingBox;

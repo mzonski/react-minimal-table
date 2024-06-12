@@ -12,8 +12,6 @@ const config = {
     "react/require-default-props": "off",
     "react/jsx-props-no-spreading": "off",
     "react/destructuring-assignment": "off",
-    // TODO: weź to w końcu ogarnij
-    // "import/no-extraneous-dependencies": "off",
   },
   settings: {
     "import/resolver": {
